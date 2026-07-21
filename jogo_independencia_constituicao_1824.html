@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#163b36" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Brasil em Construção — Independência e Constituição de 1824</title>
+  <style>
+    :root{
+      --petroleo:#173f3a;
+      --petroleo-2:#0f2f2b;
+      --verde:#2f6b5f;
+      --bege:#eadfc8;
+      --areia:#f5f0e6;
+      --marfim:#fffdf8;
+      --ouro:#b88b3d;
+      --vinho:#7f3342;
+      --cinza:#66706d;
+      --correta:#2f7d57;
+      --errada:#a74646;
+      --sombra:0 18px 45px rgba(15,47,43,.14);
+      --raio:22px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color:var(--petroleo-2);
+      background:
+        radial-gradient(circle at 15% 10%, rgba(184,139,61,.13), transparent 26rem),
+        linear-gradient(180deg,#eef2ec 0%,#f8f3e9 52%,#e8eee9 100%);
+      padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+    }
+    button,input{font:inherit}
+    button{touch-action:manipulation}
+    .app{max-width:1040px;margin:auto;padding:20px}
+    .hero{
+      position:relative;
+      overflow:hidden;
+      background:linear-gradient(135deg,var(--petroleo-2),var(--petroleo));
+      color:white;
+      border-radius:28px;
+      padding:34px;
+      box-shadow:var(--sombra);
+      min-height:245px;
+    }
+    .hero:before,.hero:after{
+      content:"";
+      position:absolute;
+      border:1px solid rgba(255,255,255,.16);
+      transform:rotate(30deg);
+    }
+    .hero:before{width:280px;height:280px;right:-110px;top:-130px}
+    .hero:after{width:170px;height:170px;right:40px;bottom:-110px}
+    .eyebrow{
+      text-transform:uppercase;
+      letter-spacing:.15em;
+      font-size:.76rem;
+      color:#dfc892;
+      font-weight:800;
+    }
+    h1{font-family:Georgia,serif;font-size:clamp(2rem,7vw,4rem);line-height:.98;margin:12px 0 16px;max-width:760px}
+    .hero p{max-width:720px;line-height:1.65;color:#e9f0ed;margin:0}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+    .btn{
+      border:0;
+      border-radius:14px;
+      padding:13px 18px;
+      cursor:pointer;
+      font-weight:800;
+      transition:.2s transform,.2s opacity,.2s background;
+    }
+    .btn:active{transform:scale(.98)}
+    .btn-primary{background:var(--bege);color:var(--petroleo-2)}
+    .btn-secondary{background:rgba(255,255,255,.11);color:white;border:1px solid rgba(255,255,255,.25)}
+    .btn-dark{background:var(--petroleo);color:white}
+    .btn-ghost{background:transparent;color:var(--petroleo);border:1px solid #bbcac5}
+    .dashboard{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+      margin:18px 0;
+    }
+    .stat{
+      background:rgba(255,253,248,.87);
+      border:1px solid rgba(23,63,58,.09);
+      border-radius:18px;
+      padding:16px;
+      box-shadow:0 8px 24px rgba(15,47,43,.06);
+    }
+    .stat span{font-size:.76rem;text-transform:uppercase;letter-spacing:.09em;color:var(--cinza);font-weight:800}
+    .stat strong{display:block;font-size:1.5rem;margin-top:6px}
+    .progress-wrap{height:9px;background:#dce5df;border-radius:999px;overflow:hidden;margin-top:9px}
+    .progress{height:100%;width:0;background:linear-gradient(90deg,var(--ouro),#d7b46e);transition:width .35s}
+    .screen{
+      background:rgba(255,253,248,.94);
+      border:1px solid rgba(23,63,58,.09);
+      border-radius:var(--raio);
+      box-shadow:var(--sombra);
+      padding:26px;
+      display:none;
+    }
+    .screen.active{display:block;animation:entrar .28s ease}
+    @keyframes entrar{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    .mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+    .mode{
+      text-align:left;background:var(--marfim);border:1px solid #d9e1dc;border-radius:18px;padding:20px;cursor:pointer;
+      min-height:180px;transition:.2s transform,.2s border-color,.2s box-shadow;
+    }
+    .mode:hover{transform:translateY(-3px);border-color:var(--ouro);box-shadow:0 14px 30px rgba(15,47,43,.08)}
+    .mode .icon{font-size:2rem}
+    .mode h3{margin:12px 0 8px;font-family:Georgia,serif}
+    .mode p{margin:0;color:var(--cinza);line-height:1.5;font-size:.93rem}
+    .topline{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+    .tag{display:inline-flex;align-items:center;gap:7px;background:#e8efeb;color:var(--petroleo);padding:7px 10px;border-radius:999px;font-size:.78rem;font-weight:800}
+    .question-title{font-family:Georgia,serif;font-size:clamp(1.35rem,4vw,2rem);line-height:1.3;margin:18px 0}
+    .options{display:grid;gap:11px}
+    .option{
+      width:100%;text-align:left;border:1px solid #cdd8d2;background:white;border-radius:15px;padding:15px 16px;
+      color:var(--petroleo-2);cursor:pointer;font-weight:650;line-height:1.4;
+    }
+    .option:hover{border-color:var(--verde);background:#f5f9f6}
+    .option.correct{background:#e4f2ea;border-color:var(--correta);color:#1f5c3e}
+    .option.wrong{background:#f7e5e5;border-color:var(--errada);color:#7a2929}
+    .option:disabled{cursor:default;opacity:1}
+    .feedback{
+      display:none;margin-top:16px;border-left:5px solid var(--ouro);background:#f4efe3;border-radius:13px;padding:16px;line-height:1.6
+    }
+    .feedback.show{display:block}
+    .feedback strong{display:block;margin-bottom:5px}
+    .nav-actions{display:flex;justify-content:space-between;gap:12px;margin-top:18px;flex-wrap:wrap}
+    .timeline{display:grid;gap:12px;margin-top:20px}
+    .timeline-item{display:grid;grid-template-columns:85px 1fr;gap:14px;align-items:start}
+    .year{font-weight:900;color:var(--ouro);font-size:1.1rem}
+    .event{border-left:2px solid #b7c8c0;padding-left:15px;line-height:1.55}
+    .event strong{display:block;color:var(--petroleo)}
+    .result{text-align:center;padding:18px 0}
+    .result-score{font-family:Georgia,serif;font-size:clamp(3rem,12vw,6rem);color:var(--petroleo);margin:8px}
+    .medal{font-size:4rem}
+    .review{display:grid;gap:10px;margin-top:22px;text-align:left}
+    .review-item{padding:14px;border:1px solid #d7dfda;border-radius:14px;background:white}
+    .review-item.ok{border-left:5px solid var(--correta)}
+    .review-item.no{border-left:5px solid var(--errada)}
+    .hidden{display:none!important}
+    footer{text-align:center;color:var(--cinza);font-size:.84rem;padding:22px}
+    @media(max-width:760px){
+      .app{padding:12px}
+      .hero{padding:25px 20px;border-radius:22px}
+      .dashboard{grid-template-columns:repeat(2,1fr)}
+      .mode-grid{grid-template-columns:1fr}
+      .screen{padding:19px}
+      .topline{display:block}
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <div class="eyebrow">Jogo de História do Brasil</div>
+      <h1>Brasil em Construção</h1>
+      <p>Teste seus conhecimentos sobre o processo de Independência, o Primeiro Reinado e a Constituição de 1824. Cada resposta traz uma explicação histórica.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="showScreen('menu')">Começar a jogar</button>
+        <button class="btn btn-secondary" onclick="showScreen('resumo')">Revisão rápida</button>
+      </div>
+    </section>
+
+    <section class="dashboard">
+      <div class="stat"><span>Pontos</span><strong id="score">0</strong></div>
+      <div class="stat"><span>Acertos</span><strong id="hits">0</strong></div>
+      <div class="stat"><span>Sequência</span><strong id="streak">0</strong></div>
+      <div class="stat"><span>Progresso</span><strong id="progressText">0%</strong><div class="progress-wrap"><div class="progress" id="progress"></div></div></div>
+    </section>
+
+    <section class="screen active" id="menu">
+      <div class="eyebrow" style="color:var(--ouro)">Escolha um modo</div>
+      <h2 style="font-family:Georgia,serif">Qual desafio você quer enfrentar?</h2>
+      <div class="mode-grid">
+        <button class="mode" onclick="startGame('independencia')">
+          <div class="icon">⚔️</div><h3>Independência</h3>
+          <p>Crise do sistema colonial, Cortes de Lisboa, Dia do Fico, 7 de Setembro e reconhecimento externo.</p>
+        </button>
+        <button class="mode" onclick="startGame('constituicao')">
+          <div class="icon">📜</div><h3>Constituição de 1824</h3>
+          <p>Constituinte de 1823, Poder Moderador, voto censitário, religião oficial e organização do Estado.</p>
+        </button>
+        <button class="mode" onclick="startGame('misto')">
+          <div class="icon">👑</div><h3>Desafio Imperial</h3>
+          <p>Questões misturadas e mais difíceis, com fatos políticos, sociais e institucionais do Primeiro Reinado.</p>
+        </button>
+      </div>
+    </section>
+
+    <section class="screen" id="quiz">
+      <div class="topline">
+        <span class="tag" id="categoryTag">Tema</span>
+        <span class="tag" id="questionCounter">Questão 1 de 10</span>
+      </div>
+      <div class="question-title" id="question"></div>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="nav-actions">
+        <button class="btn btn-ghost" onclick="showScreen('menu')">Sair da rodada</button>
+        <button class="btn btn-dark hidden" id="nextBtn" onclick="nextQuestion()">Próxima questão</button>
+      </div>
+    </section>
+
+    <section class="screen" id="result">
+      <div class="result">
+        <div class="medal" id="medal">🏅</div>
+        <div class="eyebrow" style="color:var(--ouro)">Resultado final</div>
+        <div class="result-score" id="finalScore">0</div>
+        <h2 id="resultTitle"></h2>
+        <p id="resultText"></p>
+        <div class="nav-actions" style="justify-content:center">
+          <button class="btn btn-primary" style="background:var(--bege)" onclick="restartGame()">Jogar novamente</button>
+          <button class="btn btn-dark" onclick="showScreen('menu')">Escolher outro modo</button>
+        </div>
+        <div class="review" id="review"></div>
+      </div>
+    </section>
+
+    <section class="screen" id="resumo">
+      <div class="eyebrow" style="color:var(--ouro)">Linha do tempo essencial</div>
+      <h2 style="font-family:Georgia,serif">Da crise do Reino Unido à Carta de 1824</h2>
+      <div class="timeline">
+        <div class="timeline-item"><div class="year">1808</div><div class="event"><strong>Transferência da Corte</strong>A família real portuguesa chega ao Rio de Janeiro. A abertura dos portos e a criação de instituições alteram a posição política e econômica do Brasil.</div></div>
+        <div class="timeline-item"><div class="year">1815</div><div class="event"><strong>Reino Unido</strong>O Brasil é elevado à condição de Reino Unido a Portugal e Algarves, deixando formalmente de ser colônia.</div></div>
+        <div class="timeline-item"><div class="year">1820</div><div class="event"><strong>Revolução Liberal do Porto</strong>As Cortes portuguesas exigem o retorno de D. João VI e tentam restabelecer a centralidade de Lisboa.</div></div>
+        <div class="timeline-item"><div class="year">1821</div><div class="event"><strong>Retorno de D. João VI</strong>D. Pedro permanece no Brasil como príncipe regente.</div></div>
+        <div class="timeline-item"><div class="year">1822</div><div class="event"><strong>Dia do Fico e Independência</strong>Em 9 de janeiro, D. Pedro decide permanecer. Em 7 de setembro, ocorre a ruptura política; em 12 de outubro, ele é aclamado imperador.</div></div>
+        <div class="timeline-item"><div class="year">1823</div><div class="event"><strong>Constituinte dissolvida</strong>A Assembleia Constituinte entra em conflito com D. Pedro I e é dissolvida na Noite da Agonia.</div></div>
+        <div class="timeline-item"><div class="year">1824</div><div class="event"><strong>Constituição outorgada</strong>A Carta institui monarquia hereditária, quatro poderes, voto censitário indireto, catolicismo oficial e Estado unitário.</div></div>
+        <div class="timeline-item"><div class="year">1825</div><div class="event"><strong>Reconhecimento português</strong>Portugal reconhece a independência mediante tratado, com mediação britânica e obrigações financeiras para o Brasil.</div></div>
+      </div>
+      <div class="nav-actions"><button class="btn btn-dark" onclick="showScreen('menu')">Voltar ao jogo</button></div>
+    </section>
+    <footer>Arquivo autossuficiente: funciona sem internet e salva apenas o recorde local no navegador.</footer>
+  </main>
+
+<script>
+const bank = {
+independencia: [
+ {c:"Independência",q:"Qual evento de 1820 intensificou a pressão para o retorno de D. João VI a Portugal e para a recolonização política do Brasil?",o:["Revolução Liberal do Porto","Confederação do Equador","Revolução Praieira","Guerra da Cisplatina"],a:0,e:"A Revolução Liberal do Porto convocou Cortes constituintes e exigiu o retorno do rei. Seus decretos buscavam subordinar novamente as províncias brasileiras a Lisboa."},
+ {c:"Independência",q:"O chamado Dia do Fico ocorreu em:",o:["9 de janeiro de 1822","7 de setembro de 1822","12 de outubro de 1822","1º de dezembro de 1822"],a:0,e:"Em 9 de janeiro de 1822, D. Pedro declarou que permaneceria no Brasil, contrariando as determinações das Cortes portuguesas."},
+ {c:"Independência",q:"Qual grupo teve papel decisivo na articulação política da permanência de D. Pedro e da ruptura com Portugal?",o:["Setores das elites do Centro-Sul","Somente escravizados libertos","Exclusivamente comerciantes portugueses","Apenas militares estrangeiros"],a:0,e:"Proprietários, comerciantes e burocratas do Centro-Sul apoiaram uma independência monárquica que preservasse a unidade territorial e a ordem social."},
+ {c:"Independência",q:"A independência brasileira pode ser caracterizada como:",o:["Uma ruptura política com preservação de importantes estruturas sociais","Uma revolução social que aboliu a escravidão","Uma guerra popular que instaurou uma república","Um processo sem conflitos militares"],a:0,e:"Houve ruptura com Portugal, mas foram mantidas a monarquia, a escravidão, a grande propriedade e a centralidade das elites. Também ocorreram guerras em províncias como Bahia, Maranhão e Pará."},
+ {c:"Independência",q:"Quem é frequentemente associado ao projeto político de uma monarquia constitucional centralizada e à atuação como ministro de D. Pedro?",o:["José Bonifácio de Andrada e Silva","Frei Caneca","Bento Gonçalves","Diogo Antônio Feijó"],a:0,e:"José Bonifácio foi figura central em 1822. Defendeu a unidade territorial, o fortalecimento do poder central e reformas graduais."},
+ {c:"Independência",q:"Em qual província ocorreu uma das mais importantes guerras pela consolidação da Independência, encerrada em 2 de julho de 1823?",o:["Bahia","São Paulo","Minas Gerais","Goiás"],a:0,e:"Na Bahia, forças favoráveis a Portugal resistiram até 2 de julho de 1823. A data é celebrada como marco da expulsão definitiva das tropas portuguesas."},
+ {c:"Independência",q:"O reconhecimento português da independência ocorreu formalmente em:",o:["1825","1822","1824","1831"],a:0,e:"Portugal reconheceu a independência em 1825, em tratado mediado pela Grã-Bretanha. O acordo envolveu indenização e compromissos financeiros."},
+ {c:"Independência",q:"Qual potência exerceu forte influência diplomática e financeira no reconhecimento externo da Independência?",o:["Grã-Bretanha","Rússia","Prússia","Áustria"],a:0,e:"A Grã-Bretanha mediou as negociações com Portugal e consolidou sua influência econômica, financeira e diplomática sobre o novo Império."},
+ {c:"Independência",q:"A aclamação de D. Pedro como imperador ocorreu em:",o:["12 de outubro de 1822","7 de setembro de 1822","9 de janeiro de 1822","25 de março de 1824"],a:0,e:"D. Pedro foi aclamado imperador em 12 de outubro de 1822 e coroado em 1º de dezembro do mesmo ano."},
+ {c:"Independência",q:"Por que a monarquia foi útil às elites que conduziram a Independência?",o:["Porque favorecia a unidade territorial e a continuidade da ordem social","Porque eliminava a escravidão imediatamente","Porque transferia a capital para Lisboa","Porque extinguia o poder das elites provinciais"],a:0,e:"A monarquia oferecia um centro de autoridade capaz de conter fragmentações provinciais e preservar hierarquias sociais, propriedade e escravidão."}
+],
+constituicao: [
+ {c:"Constituição de 1824",q:"A Constituição de 1824 foi:",o:["Outorgada por D. Pedro I","Promulgada por uma Constituinte soberana","Aprovada por sufrágio universal","Redigida após a abdicação"],a:0,e:"Depois de dissolver a Constituinte de 1823, D. Pedro I nomeou um Conselho de Estado e outorgou a Carta em 25 de março de 1824."},
+ {c:"Constituição de 1824",q:"Quantos poderes foram formalmente estabelecidos pela Constituição de 1824?",o:["Quatro","Três","Cinco","Dois"],a:0,e:"Além de Executivo, Legislativo e Judiciário, a Carta criou o Poder Moderador, atribuído privativamente ao imperador."},
+ {c:"Constituição de 1824",q:"O Poder Moderador permitia ao imperador:",o:["Intervir no funcionamento dos demais poderes","Abolir automaticamente toda lei provincial","Transferir o trono por eleição direta","Governar sem ministros"],a:0,e:"O Poder Moderador colocava o imperador como chave da organização política, com competências como dissolver a Câmara, nomear senadores e escolher ministros."},
+ {c:"Constituição de 1824",q:"O sistema eleitoral previsto pela Carta de 1824 era:",o:["Indireto e censitário","Direto e universal","Secreto e feminino","Restrito apenas a militares"],a:0,e:"A eleição ocorria em graus e dependia de renda. A cidadania política era limitada por critérios econômicos e sociais."},
+ {c:"Constituição de 1824",q:"Qual religião foi definida como oficial do Império?",o:["Catolicismo","Protestantismo","Judaísmo","Nenhuma, pois o Estado era laico"],a:0,e:"O catolicismo era a religião oficial. Outros cultos eram tolerados de forma doméstica ou privada, sem exterior de templo."},
+ {c:"Constituição de 1824",q:"Como eram escolhidos os senadores?",o:["O imperador escolhia um nome em lista tríplice e o cargo era vitalício","Por eleição direta para mandato de quatro anos","Por sorteio entre deputados","Pelos presidentes de província"],a:0,e:"Os eleitores formavam listas tríplices, e o imperador escolhia um nome. O cargo de senador era vitalício."},
+ {c:"Constituição de 1824",q:"A organização territorial do Império era predominantemente:",o:["Unitária e centralizada","Federal e descentralizada","Confederativa","Municipalista"],a:0,e:"As províncias possuíam autonomia limitada. Seus presidentes eram nomeados pelo imperador, reforçando a centralização."},
+ {c:"Constituição de 1824",q:"Qual episódio marcou a dissolução da Assembleia Constituinte de 1823?",o:["Noite da Agonia","Dia do Fico","Grito do Ipiranga","Golpe da Maioridade"],a:0,e:"Na Noite da Agonia, em novembro de 1823, tropas cercaram a Assembleia, que foi dissolvida por ordem de D. Pedro I."},
+ {c:"Constituição de 1824",q:"A Constituição de 1824 reconhecia formalmente:",o:["Direitos civis inspirados no liberalismo, mas convivendo com a escravidão","A igualdade política plena entre todos os habitantes","O fim imediato do tráfico negreiro","A autonomia legislativa completa das províncias"],a:0,e:"A Carta incorporou garantias liberais, mas elas coexistiram com a escravidão e com profundas exclusões sociais e políticas."},
+ {c:"Constituição de 1824",q:"Qual revolta de 1824 reagiu à centralização imperial e teve forte expressão em Pernambuco?",o:["Confederação do Equador","Sabinada","Balaiada","Revolta dos Malês"],a:0,e:"A Confederação do Equador foi um movimento republicano e federalista contra a centralização e o autoritarismo de D. Pedro I."}
+]
+};
+
+bank.misto = [...bank.independencia.slice(0,5), ...bank.constituicao.slice(0,5), 
+ {c:"Desafio Imperial",q:"A solução monárquica da Independência brasileira contrastou com grande parte da América Hispânica porque:",o:["Preservou uma dinastia e ajudou a manter a unidade territorial","Implantou uma confederação de repúblicas","Eliminou as elites coloniais","Foi conduzida sem participação de um príncipe europeu"],a:0,e:"Enquanto a América Hispânica se fragmentou em repúblicas, o Brasil manteve a dinastia de Bragança e um governo central monárquico."},
+ {c:"Desafio Imperial",q:"A chamada Constituição da Mandioca, projeto discutido em 1823, recebeu esse apelido porque:",o:["Usava a renda agrícola como referência para direitos políticos","Proibia o cultivo de mandioca","Criava imposto exclusivo sobre farinha","Foi escrita por agricultores pernambucanos"],a:0,e:"O projeto vinculava capacidade eleitoral à renda medida em alqueires de farinha de mandioca, restringindo a participação política."},
+ {c:"Desafio Imperial",q:"A principal contradição liberal do novo Império foi:",o:["Defender direitos constitucionais mantendo a escravidão","Adotar republicanismo com rei hereditário","Proibir toda propriedade privada","Recusar qualquer relação com a Europa"],a:0,e:"O constitucionalismo liberal coexistiu com a escravidão, a desigualdade jurídica concreta e a exclusão política da maioria da população."},
+ {c:"Desafio Imperial",q:"O padroado, no Império, significava:",o:["Forte ligação institucional entre Coroa e Igreja Católica","Separação completa entre Igreja e Estado","Eleição popular de bispos","Proibição de qualquer culto católico"],a:0,e:"Pelo padroado, o Estado exercia controle sobre assuntos e nomeações eclesiásticas, submetidos também à confirmação papal."},
+ {c:"Desafio Imperial",q:"Uma consequência duradoura da Constituição de 1824 foi:",o:["Servir como base jurídica do Império até 1889","Ser substituída durante a Regência","Criar o federalismo republicano","Estabelecer eleições presidenciais"],a:0,e:"A Carta de 1824 permaneceu em vigor durante todo o período imperial, sendo substituída apenas após a Proclamação da República."}
+];
+
+let currentMode="independencia", questions=[], index=0, score=0, hits=0, streak=0, answered=false, answers=[];
+
+function shuffle(arr){return [...arr].sort(()=>Math.random()-.5)}
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:document.querySelector('.dashboard').offsetTop-8,behavior:'smooth'});
+}
+function startGame(mode){
+  currentMode=mode;
+  questions=shuffle(bank[mode]).slice(0, mode==="misto"?12:10);
+  index=score=hits=streak=0; answers=[];
+  updateStats();
+  showScreen('quiz');
+  renderQuestion();
+}
+function renderQuestion(){
+  answered=false;
+  const q=questions[index];
+  document.getElementById('categoryTag').textContent=q.c;
+  document.getElementById('questionCounter').textContent=`Questão ${index+1} de ${questions.length}`;
+  document.getElementById('question').textContent=q.q;
+  document.getElementById('feedback').className='feedback';
+  document.getElementById('nextBtn').classList.add('hidden');
+  const opts=q.o.map((text,i)=>({text,correct:i===q.a}));
+  const shuffled=shuffle(opts);
+  const box=document.getElementById('options'); box.innerHTML='';
+  shuffled.forEach(opt=>{
+    const b=document.createElement('button');
+    b.className='option'; b.textContent=opt.text;
+    b.onclick=()=>answerQuestion(b,opt.correct,opt.text);
+    box.appendChild(b);
+  });
+}
+function answerQuestion(btn,isCorrect,text){
+  if(answered)return; answered=true;
+  const q=questions[index];
+  document.querySelectorAll('.option').forEach(b=>b.disabled=true);
+  if(isCorrect){
+    btn.classList.add('correct'); hits++; streak++;
+    const bonus=Math.min(streak*10,50); score+=100+bonus;
+  }else{
+    btn.classList.add('wrong'); streak=0;
+    document.querySelectorAll('.option').forEach(b=>{
+      if(q.o[q.a]===b.textContent)b.classList.add('correct');
+    });
+  }
+  answers.push({q:q.q,ok:isCorrect,correct:q.o[q.a],chosen:text});
+  const feedback=document.getElementById('feedback');
+  feedback.innerHTML=`<strong>${isCorrect?'Resposta correta!':'Resposta incorreta.'}</strong>${q.e}`;
+  feedback.classList.add('show');
+  document.getElementById('nextBtn').textContent=index===questions.length-1?'Ver resultado':'Próxima questão';
+  document.getElementById('nextBtn').classList.remove('hidden');
+  updateStats();
+}
+function nextQuestion(){
+  index++;
+  if(index>=questions.length)finishGame(); else renderQuestion();
+}
+function updateStats(){
+  document.getElementById('score').textContent=score;
+  document.getElementById('hits').textContent=hits;
+  document.getElementById('streak').textContent=streak;
+  const pct=questions.length?Math.round((index+(answered?1:0))/questions.length*100):0;
+  document.getElementById('progressText').textContent=pct+'%';
+  document.getElementById('progress').style.width=pct+'%';
+}
+function finishGame(){
+  const pct=Math.round(hits/questions.length*100);
+  document.getElementById('finalScore').textContent=pct+'%';
+  let medal='📚',title='Boa base — continue revisando',text='Revise as explicações e tente novamente para consolidar datas, instituições e conceitos.';
+  if(pct>=90){medal='👑';title='Conselheiro do Império';text='Excelente domínio do processo de Independência e da Constituição de 1824.'}
+  else if(pct>=70){medal='🏅';title='Deputado da Constituinte';text='Ótimo desempenho. Faltam poucos detalhes para atingir o domínio completo.'}
+  else if(pct>=50){medal='📜';title='Estudioso do Primeiro Reinado';text='Você reconhece os elementos centrais, mas ainda precisa reforçar algumas relações históricas.'}
+  document.getElementById('medal').textContent=medal;
+  document.getElementById('resultTitle').textContent=title;
+  document.getElementById('resultText').textContent=`Você acertou ${hits} de ${questions.length} questões e marcou ${score} pontos. ${text}`;
+  const review=document.getElementById('review'); review.innerHTML='<h3>Revisão da rodada</h3>';
+  answers.forEach((a,i)=>{
+    const div=document.createElement('div'); div.className='review-item '+(a.ok?'ok':'no');
+    div.innerHTML=`<strong>${i+1}. ${a.q}</strong><br>${a.ok?'✓ Acertou':'✗ Sua resposta: '+a.chosen+'<br>Resposta correta: '+a.correct}`;
+    review.appendChild(div);
+  });
+  localStorage.setItem('brasil1824Best',Math.max(score,Number(localStorage.getItem('brasil1824Best')||0)));
+  updateStats(); showScreen('result');
+}
+function restartGame(){startGame(currentMode)}
+</script>
+</body>
+</html>
